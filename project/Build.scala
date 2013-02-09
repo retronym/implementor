@@ -9,8 +9,8 @@ object BuildSettings {
     organization := "org.scalamock",
     version := buildVersion,
     scalaVersion := buildScalaVersion,
-    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature"),
-
+    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-Ycheck:typer"),
+    scalaHome := Some(file("/Users/jason/code/scala2/build/pack")),
     shellPrompt := ShellPrompt.buildShellPrompt
   )
 }
@@ -26,7 +26,7 @@ object ShellPrompt {
       getOrElse "-" stripPrefix "## "
   )
 
-  val buildShellPrompt = { 
+  val buildShellPrompt = {
     (state: State) => {
       val currProject = Project.extract (state).currentProject.id
       "%s:%s:%s> ".format (
@@ -46,12 +46,12 @@ object ScalaMockBuild extends Build {
   import Dependencies._
 
   lazy val scalamock = Project(
-    "Implementor", 
+    "Implementor",
     file("."),
     settings = buildSettings) aggregate(core, core_tests)
 
   lazy val core = Project(
-    "core", 
+    "core",
     file("core"),
     settings = buildSettings ++ Seq(
       name := "Implementor Core",
@@ -59,7 +59,7 @@ object ScalaMockBuild extends Build {
     ))
 
   lazy val core_tests = Project(
-    "core_tests", 
+    "core_tests",
     file("core_tests"),
     settings = buildSettings ++ Seq(
       name := "Implementor Core Tests"
